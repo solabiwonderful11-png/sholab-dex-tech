@@ -1,0 +1,22 @@
+# pnpm 11 reads overrides from here (the package.json "pnpm" field is ignored).
+# These pin transitive dependencies to their patched versions so `pnpm audit`
+# reports no known vulnerabilities.
+overrides:
+  shell-quote: ">=1.12.0"
+  nanoid: ">=3.3.18"
+  source-map-js: ">=1.2.2"
+  esbuild: ">=0.28.2"
+  postcss: ">=8.5.32"
+  vite: ">=8.3.6"
+  vitest: ">=5.1.0"
+  "@vitest/mocker": ">=4.1.12"
+  hono: ">=4.13.17"
+  "@hono/node-server": ">=2.1.6"
+  zod: ">=4.6.7"
+
+# pnpm 10+ blocks dependency build scripts by default. esbuild needs its
+# postinstall (it links its native binary, which Vite and @tailwindcss use), so
+# it is explicitly allowed here. Without this, `pnpm install` exits 1 with
+# ERR_PNPM_IGNORED_BUILDS and every script that runs an install first fails.
+allowBuilds:
+  esbuild: true

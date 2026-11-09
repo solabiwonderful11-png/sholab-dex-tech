@@ -1,0 +1,366 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Tailwind v4 is CSS-first: no tailwind.config / postcss / autoprefixer.
+   Dark mode is class-based (add `dark` on <html>/<body>); shadcn/ui token set. */
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.5rem;
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(222.2 84% 4.9%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222.2 84% 4.9%);
+  --primary: hsl(222.2 47.4% 11.2%);
+  --primary-foreground: hsl(210 40% 98%);
+  --secondary: hsl(210 40% 96.1%);
+  --secondary-foreground: hsl(222.2 47.4% 11.2%);
+  --muted: hsl(210 40% 96.1%);
+  --muted-foreground: hsl(215.4 16.3% 46.9%);
+  --accent: hsl(210 40% 96.1%);
+  --accent-foreground: hsl(222.2 47.4% 11.2%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(214.3 31.8% 91.4%);
+  --input: hsl(214.3 31.8% 91.4%);
+  --ring: hsl(222.2 84% 4.9%);
+}
+
+.dark {
+  --background: hsl(222.2 84% 4.9%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(222.2 84% 4.9%);
+  --card-foreground: hsl(210 40% 98%);
+  --primary: hsl(210 40% 98%);
+  --primary-foreground: hsl(222.2 47.4% 11.2%);
+  --secondary: hsl(217.2 32.6% 17.5%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(217.2 32.6% 17.5%);
+  --muted-foreground: hsl(215 20.2% 65.1%);
+  --accent: hsl(217.2 32.6% 17.5%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(217.2 32.6% 17.5%);
+  --input: hsl(217.2 32.6% 17.5%);
+  --ring: hsl(212.7 26.8% 83.9%);
+}
+
+/* Map design tokens to Tailwind's theme so utilities (bg-primary, border-border,
+   rounded-lg, …) resolve. @theme inline references the vars above unwrapped. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SITE DESIGN SYSTEM — Sholab Dex Tech
+   Dark-blue / navy theme with an electric blue → cyan accent.
+   Every `sdt-*` class used by the site and admin pages is defined here.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --sdt-navy-950: #060d1f;
+  --sdt-navy-900: #0a1633;
+  --sdt-navy-800: #0f1e3d;
+  --sdt-blue: #2563eb;
+  --sdt-cyan: #06b6d4;
+  --sdt-wa: #25d366;
+  --sdt-wa-dark: #1ebe5b;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Keep anchored sections clear of the 64px fixed header. */
+  scroll-padding-top: 4.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--sdt-navy-950);
+  color: #e2e8f0;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(6, 182, 212, 0.35);
+  color: #fff;
+}
+
+/* Respect a user's reduced-motion preference: kill decorative motion, keep
+   reveal animations in their FINAL state so nothing is left invisible. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .sdt-particle,
+  .sdt-orb,
+  .sdt-grid {
+    animation: none !important;
+  }
+  .sdt-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+
+.sdt-btn-primary {
+  background-image: linear-gradient(120deg, var(--sdt-blue) 0%, var(--sdt-cyan) 100%);
+  color: #fff;
+  box-shadow: 0 10px 26px -10px rgba(37, 99, 235, 0.85);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+.sdt-btn-primary:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 16px 34px -12px rgba(6, 182, 212, 0.9);
+  transform: translateY(-1px);
+}
+.sdt-btn-primary:active {
+  transform: translateY(0);
+}
+.sdt-btn-primary:focus-visible {
+  outline: 2px solid #7dd3fc;
+  outline-offset: 3px;
+}
+
+.sdt-btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  color: #e2e8f0;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+.sdt-btn-ghost:hover {
+  background: rgba(125, 211, 252, 0.12);
+  border-color: rgba(125, 211, 252, 0.55);
+  transform: translateY(-1px);
+}
+.sdt-btn-ghost:focus-visible {
+  outline: 2px solid #7dd3fc;
+  outline-offset: 3px;
+}
+
+/* WhatsApp green — used for every "Chat on WhatsApp" affordance. */
+.sdt-wa {
+  background: linear-gradient(160deg, var(--sdt-wa) 0%, var(--sdt-wa-dark) 100%);
+  color: #04220f;
+  box-shadow: 0 10px 26px -12px rgba(37, 211, 102, 0.85);
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+.sdt-wa:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+.sdt-wa:focus-visible {
+  outline: 2px solid #86efac;
+  outline-offset: 3px;
+}
+
+/* ── Surfaces ─────────────────────────────────────────────────────────────── */
+
+.sdt-card {
+  background: linear-gradient(180deg, rgba(15, 30, 61, 0.55) 0%, rgba(10, 22, 51, 0.75) 100%);
+  border: 1px solid rgba(125, 211, 252, 0.14);
+  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+.sdt-card:hover {
+  border-color: rgba(125, 211, 252, 0.36);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.9);
+}
+
+.sdt-section-alt {
+  background: linear-gradient(180deg, rgba(10, 22, 51, 0.35) 0%, rgba(6, 13, 31, 0.9) 100%);
+}
+
+.sdt-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(125, 211, 252, 0.28) 50%,
+    transparent 100%
+  );
+}
+
+.sdt-gradient-text {
+  background-image: linear-gradient(105deg, #ffffff 0%, #bae6fd 45%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Scroll reveal ────────────────────────────────────────────────────────── */
+
+.sdt-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.sdt-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Hero background: grid + orbs + particles ─────────────────────────────── */
+
+.sdt-hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(1100px 520px at 50% -10%, rgba(37, 99, 235, 0.28) 0%, transparent 65%),
+    radial-gradient(800px 500px at 100% 100%, rgba(6, 182, 212, 0.14) 0%, transparent 70%),
+    linear-gradient(180deg, var(--sdt-navy-950) 0%, #071229 100%);
+}
+
+.sdt-grid {
+  position: absolute;
+  inset: -40%;
+  background-image:
+    linear-gradient(to right, rgba(125, 211, 252, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(125, 211, 252, 0.07) 1px, transparent 1px);
+  background-size: 54px 54px;
+  transform: perspective(620px) rotateX(58deg);
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 45%, #000 25%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 45%, #000 25%, transparent 78%);
+  animation: sdt-grid-drift 26s linear infinite;
+}
+
+@keyframes sdt-grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 54px 54px;
+  }
+}
+
+.sdt-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  opacity: 0.5;
+  animation: sdt-orb-float 17s ease-in-out infinite;
+}
+.sdt-orb-1 {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  left: -90px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.7) 0%, transparent 70%);
+}
+.sdt-orb-2 {
+  width: 380px;
+  height: 380px;
+  bottom: -140px;
+  right: -80px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.6) 0%, transparent 70%);
+  animation-delay: -6s;
+}
+.sdt-orb-3 {
+  width: 300px;
+  height: 300px;
+  top: 38%;
+  left: 58%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.34) 0%, transparent 70%);
+  animation-delay: -11s;
+}
+
+@keyframes sdt-orb-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(18px, -26px, 0) scale(1.08);
+  }
+}
+
+.sdt-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #a5f3fc;
+  box-shadow: 0 0 8px 1px rgba(165, 243, 252, 0.7);
+  opacity: 0;
+  animation: sdt-particle-rise linear infinite;
+}
+
+@keyframes sdt-particle-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  15% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-320px) scale(1.05);
+  }
+}
+
+/* ── Small helpers ────────────────────────────────────────────────────────── */
+
+/* Horizontal scroll container for the pricing comparison table: keep the
+   scrollbar visible instead of hidden, so a phone user can tell it scrolls. */
+.sdt-scroll-x {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(125, 211, 252, 0.35) transparent;
+}
+.sdt-scroll-x::-webkit-scrollbar {
+  height: 8px;
+}
+.sdt-scroll-x::-webkit-scrollbar-thumb {
+  background: rgba(125, 211, 252, 0.35);
+  border-radius: 999px;
+}
+.sdt-scroll-x::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Long WhatsApp links / emails must wrap instead of forcing the page wider. */
+.sdt-break {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
